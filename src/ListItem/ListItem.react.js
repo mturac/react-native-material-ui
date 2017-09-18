@@ -25,10 +25,6 @@ const propTypes = {
     divider: PropTypes.bool,
     onPress: PropTypes.func,
     onPressValue: PropTypes.any,
-    /**
-    * Called when list item is long pressed.
-    */
-    onLongPress: PropTypes.func,
     numberOfLines: PropTypes.oneOf([1, 2, 3, 'dynamic']),
     style: PropTypes.object,
 
@@ -56,16 +52,11 @@ const propTypes = {
         PropTypes.string,
     ]),
     onRightElementPress: PropTypes.func,
-    /**
-     * Children passed into the `ListItem`.
-     */
-    children: PropTypes.node,
 };
 const defaultProps = {
     dense: false,
     onPress: null,
     onPressValue: null,
-    onLongPress: null,
     divider: false,
     leftElement: null,
     onLeftElementPress: null,
@@ -73,7 +64,6 @@ const defaultProps = {
     rightElement: null,
     onRightElementPress: null,
     numberOfLines: 1,
-    children: null,
     style: {},
 };
 const contextTypes = {
@@ -246,13 +236,6 @@ class ListItem extends PureComponent {
             onPress(onPressValue);
         }
     };
-    onListItemLongPressed = () => {
-        const { onLongPress, onPressValue } = this.props;
-
-        if (onLongPress) {
-            onLongPress(onPressValue);
-        }
-    };
     onLeftElementPressed = () => {
         const { onLeftElementPress, onPress, onPressValue } = this.props;
 
@@ -322,6 +305,7 @@ class ListItem extends PureComponent {
             }
             const secondLineNumber = !tertiaryText ? numberOfLines : 1;
             const thirdLineNumber = tertiaryText ? numberOfLines : 1;
+   
             content = (
                 <View style={styles.textViewContainer}>
                     <View style={styles.firstLine}>
@@ -421,29 +405,29 @@ class ListItem extends PureComponent {
         const { divider } = this.props;
 
         if (!divider) {
-            return null;
+            return divider;
         }
 
         return <Divider />;
     }
     renderContent = styles => (
-        <View style={styles.contentViewContainer} pointerEvents="box-only">
+        <View style={styles.contentViewContainer}>
             {this.renderLeftElement(styles)}
             {this.renderCenterElement(styles)}
             {this.renderRightElement(styles)}
         </View>
     )
     render() {
-        const { onPress, onLongPress } = this.props;
+        const { onPress } = this.props;
 
         const styles = getStyles(this.props, this.context, this.state);
-
+console.warn(styles);
         // renders left element, center element and right element
         let content = this.renderContent(styles);
 
-        if (onPress || onLongPress) {
+        if (onPress) {
             content = (
-                <RippleFeedback delayPressIn={50} onPress={this.onListItemPressed} onLongPress={this.onListItemLongPressed} >
+                <RippleFeedback delayPressIn={50} onPress={this.onListItemPressed}>
                     {content}
                 </RippleFeedback>
             );

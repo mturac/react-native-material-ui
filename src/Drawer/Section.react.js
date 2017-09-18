@@ -6,11 +6,21 @@ import { View } from 'react-native';
 import Subheader from '../Subheader';
 import Divider from '../Divider';
 import ListItem from '../ListItem';
-
+/* */
+import Icon from "../Icon";
 const propTypes = {
     title: PropTypes.string,
+    key: PropTypes.string,
     items: PropTypes.arrayOf(PropTypes.shape({
-        icon: PropTypes.string,
+      /**
+    * Will be rendered above the label as a content of the action.
+    * If string, result will be <Icon name={icon} ...rest />
+    * If ReactElement, will be used as is
+    */
+    icon: PropTypes.oneOfType([
+        PropTypes.element,
+        PropTypes.string,
+    ]).isRequired,
         value: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
         label: PropTypes.string,
         onPress: PropTypes.func,
@@ -76,22 +86,24 @@ class Section extends PureComponent {
         const { typography } = this.context.uiTheme;
 
         const styles = getStyles(this.props, this.context);
-
+      
         return (
             <View>
                 <View style={styles.container}>
                     {this.renderTitle(styles)}
                     {items && items.map((item) => {
-                        let style = { primaryText: typography.buttons };
+       
+                        let style = { primaryText: styles.primaryText != undefined ? styles.primaryText : typography.buttons, centerElementContainer:styles.centerElementContainer, container: styles.container };
 
                         if (item.active) {
                             style = this.context.uiTheme.drawerSectionActiveItem;
                         }
+                  
 
                         return (
                             <ListItem
                                 dense
-                                key={item.icon}
+                                key={item.key}
                                 leftElement={item.icon}
                                 centerElement={item.value}
                                 onPress={item.onPress}

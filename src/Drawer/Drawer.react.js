@@ -26,6 +26,10 @@ function getStyles(props, context) {
             drawer.container,
             props.style.container,
         ],
+        primaryText: [
+            drawer.primaryText,
+            props.style.primaryText
+        ]
     };
 }
 
