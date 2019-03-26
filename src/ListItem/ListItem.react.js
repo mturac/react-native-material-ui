@@ -421,7 +421,7 @@ class ListItem extends PureComponent {
         const { onPress } = this.props;
 
         const styles = getStyles(this.props, this.context, this.state);
-console.warn(styles);
+
         // renders left element, center element and right element
         let content = this.renderContent(styles);
 
